@@ -1,0 +1,42 @@
+name: Lean proof verification
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - name: Reject proof gaps and project axioms
+        run: |
+          if git grep -n -E '\b(sorry|admit|unsafe|native_decide|sorryAx)\b|^[[:space:]]*(axiom|constant)[[:space:]]' -- '*.lean'; then
+            exit 1
+          fi
+      - name: Check verified source hashes
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, pathlib
+          record = json.loads(pathlib.Path('verification.json').read_text())
+          expected = {entry['path'] for entry in record['sourceHashes']}
+          actual = {str(p) for p in pathlib.Path('RankReflection').rglob('*.lean')} | {'RankReflection.lean'}
+          assert actual == expected, 'Lean source inventory differs from the audit record'
+          for entry in record['sourceHashes']:
+              path = pathlib.Path(entry['path'])
+              assert hashlib.sha256(path.read_bytes()).hexdigest() == entry['sha256'], f'Source hash mismatch: {path}'
+          print(f'All {len(expected)} Lean source hashes match the verified proof.')
+          PY
+      - uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: true
+          use-mathlib-cache: true
+      - name: Re-run the complete project axiom audit
+        run: lake env lean RankReflection/AxiomAudit.lean

@@ -1,0 +1,11 @@
+name = "rankElementarity"
+version = "0.1.0"
+defaultTargets = ["RankReflection"]
+
+[[lean_lib]]
+name = "RankReflection"
+
+[[require]]
+name = "fullMarkedBLP"
+git = "https://github.com/EgoFakeFantasy/FullMarkedBLP.git"
+rev = "b30d35a7801859f8bc100396616050d55c2df553"

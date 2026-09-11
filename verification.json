@@ -1,0 +1,72 @@
+{
+  "status": "complete",
+  "verifiedAtUtc": "2026-09-11T00:53:34.1775092Z",
+  "toolchain": "leanprover/lean4:v4.30.0",
+  "theorem": "RankReflection.rankElementaryInclusion_unbounded",
+  "strongerTheorem": "RankReflection.exists_rankElementaryInclusion_between",
+  "buildCommand": "lake build",
+  "buildJobs": 1244,
+  "auditedTheoremConstants": 102,
+  "allowedAxioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "leanFiles": 12,
+  "physicalLines": 905,
+  "nonblankLines": 795,
+  "forbiddenSourceMatches": 0,
+  "newModuleWarnings": 0,
+  "dependenciesUnchanged": true,
+  "buildLogSha256": "28d8470a188c65625a64f3db059206b088ca03b36f0344b6cf478a15668eec97",
+  "sourceHashes": [
+    {
+      "path": "RankReflection/AxiomAudit.lean",
+      "sha256": "2e719c05083654d0cd4121b37db0b49a9f344c8c2ee7bd8512a7e7d89672e793"
+    },
+    {
+      "path": "RankReflection/ElementaryInclusionFormula.lean",
+      "sha256": "6e9c058dbc60f3a8b92cbda7c2141fa4f561f63e406daf654b19391a4f0c16f0"
+    },
+    {
+      "path": "RankReflection/FormulaRelativization.lean",
+      "sha256": "fed919e53ed085d4dd29641b0e39652e6350d8f0127059eb2d96fc8cb4f53722"
+    },
+    {
+      "path": "RankReflection/HierarchyFormula.lean",
+      "sha256": "a70df1d7c0ef7452c3ae20bfab66a39fc55aa0b524b4b53fb64edaf4944bb5d8"
+    },
+    {
+      "path": "RankReflection/RankInclusion.lean",
+      "sha256": "5c313d69805422d129016bc5d7908efb7df7e23de22dec50a95d2f9fa339a47b"
+    },
+    {
+      "path": "RankReflection/RankLimits.lean",
+      "sha256": "68fcbb03240430a44237809567683e3983329457f0214c912a726c0e82c3a7cc"
+    },
+    {
+      "path": "RankReflection/ReflectionFormula.lean",
+      "sha256": "9dc276033e0f5170c9388509d41ec3794f16546d4519e48724d7b5d4b030afb4"
+    },
+    {
+      "path": "RankReflection/ReflectionSemantics.lean",
+      "sha256": "529233bae8a506df01ac05bfc018c0f873357e42e7d17e1294de309cf6b516e0"
+    },
+    {
+      "path": "RankReflection/SetSatisfaction.lean",
+      "sha256": "366fc61ead77ac623c886fe99a2f7315fa7aa5f7b8c874044b9f6741014812fa"
+    },
+    {
+      "path": "RankReflection/TruthAgreement.lean",
+      "sha256": "390711c79d18bf6f0200fd3fe83abb9cd4262b1e7d728fa396dfe8644de08bd8"
+    },
+    {
+      "path": "RankReflection/Unbounded.lean",
+      "sha256": "7ac41aeca5915287db25c49f9cd3c57edd49ff11ef07c5bc7253ce6ceead8b32"
+    },
+    {
+      "path": "RankReflection.lean",
+      "sha256": "b3abf6b519d5824b768755f881fcd8c2a158c1119175aa28502de158a6a172e8"
+    }
+  ]
+}
