@@ -1,5 +1,8 @@
 import RankReflection.RankInclusion
 
+/-! Relativization of finite formulas: class predicates become membership in set parameters, and
+every quantifier is bounded by a domain set. -/
+
 namespace RankReflection
 
 open FullMarkedBLP

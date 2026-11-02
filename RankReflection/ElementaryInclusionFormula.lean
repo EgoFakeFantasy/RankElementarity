@@ -1,12 +1,16 @@
 import RankReflection.TruthAgreement
 import Mathlib.Tactic.FinCases
 
+/-! A finite pure membership formula expressing `V_alpha ≺ V_delta`, with its full semantic
+correctness. -/
+
 namespace RankReflection
 
 open FullMarkedBLP
 
 universe u
 
+/-- The syntax books do not depend on the rank domain they are taken in. -/
 theorem rankSyntaxBooks_val {alpha beta : Ordinal.{u}}
     (hAlpha : Ordinal.omega0 < alpha) (hBeta : Ordinal.omega0 < beta) (i : Fin 6) :
     (rankSyntaxBooks hAlpha i).val = (rankSyntaxBooks hBeta i).val := by
@@ -23,6 +27,8 @@ def elementaryInclusionBody : RankPredicateFormula 0 10 :=
 set-sized rank domains. The two truth sets are quantified, not postulated. -/
 def elementaryInclusionFormula : RankPredicateFormula 0 8 := elementaryInclusionBody.ex.ex
 
+/-- Semantics of `elementaryInclusionBody`: both truth sets satisfy the truth conditions, and they
+agree. -/
 theorem elementaryInclusionBody_realize {alpha delta eta : Ordinal.{u}}
     (hAlphaEta : alpha < eta) (hDeltaEta : delta < eta)
     (hAlpha : Order.IsSuccLimit alpha) (hDelta : Order.IsSuccLimit delta)
@@ -53,6 +59,7 @@ theorem elementaryInclusionBody_realize {alpha delta eta : Ordinal.{u}}
   rw [hSmall, hLarge, hCompare, rankTruthMatrix_correct hAlpha hOmegaAlpha,
     rankTruthMatrix_correct hDelta hOmegaDelta, truthAgreementMatrix_realize hAlpha hOmegaAlpha]
 
+/-- `elementaryInclusionBody_realize` with the two truth sets appended as the last two slots. -/
 theorem elementaryInclusionBody_snoc_realize {alpha delta eta : Ordinal.{u}}
     (hAlphaEta : alpha < eta) (hDeltaEta : delta < eta)
     (hAlpha : Order.IsSuccLimit alpha) (hDelta : Order.IsSuccLimit delta)

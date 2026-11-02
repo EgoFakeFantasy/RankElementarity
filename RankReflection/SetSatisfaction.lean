@@ -1,6 +1,9 @@
 import RankReflection.FormulaRelativization
 import FullMarkedBLP.RankTruthMatrixCorrectness
 
+/-! Classes on a set-sized rank domain represented by genuine sets in larger domains, and the finite
+formula describing satisfaction in a smaller domain. -/
+
 namespace RankReflection
 
 open FullMarkedBLP
@@ -13,6 +16,7 @@ noncomputable def rankClassSet {alpha : Ordinal.{u}} (predicate : RankClass alph
   ZFSet.sep (fun z => ∃ x : RankDomain alpha, x.val = z ∧ predicate x)
     (ZFSet.vonNeumann alpha)
 
+/-- Membership in `rankClassSet` is the original predicate. -/
 theorem rankClassSet_mem {alpha : Ordinal.{u}} (predicate : RankClass alpha)
     (x : RankDomain alpha) : x.val ∈ rankClassSet predicate ↔ predicate x := by
   rw [rankClassSet, ZFSet.mem_sep]
@@ -21,12 +25,14 @@ theorem rankClassSet_mem {alpha : Ordinal.{u}} (predicate : RankClass alpha)
     exact (Subtype.ext hYX : y = x) ▸ hY
   · exact fun h => ⟨ZFSet.mem_vonNeumann.mpr x.property, x, rfl, h⟩
 
+/-- `rankClassSet` is a subset of `V_alpha`, so its rank is at most `alpha`. -/
 theorem rankClassSet_rank_le {alpha : Ordinal.{u}} (predicate : RankClass alpha) :
     (rankClassSet predicate).rank ≤ alpha := by
   have hSubset : rankClassSet predicate ⊆ ZFSet.vonNeumann alpha :=
     fun _ h => (ZFSet.mem_sep.mp h).1
   simpa only [ZFSet.rank_vonNeumann] using ZFSet.rank_mono hSubset
 
+/-- `rankClassSet` as an element of a strictly larger rank domain. -/
 noncomputable def rankClassSetIn {alpha beta : Ordinal.{u}} (hAB : alpha < beta)
     (predicate : RankClass alpha) : RankDomain beta :=
   ⟨rankClassSet predicate, (rankClassSet_rank_le predicate).trans_lt hAB⟩
@@ -42,6 +48,8 @@ def setMatrix {m n : Nat} (phi : RankPredicateFormula m n) :
   setRelativize phi (Fin.castAdd (m + 1)) (fun a => Fin.natAdd n a.castSucc)
     (Fin.natAdd n (Fin.last m))
 
+/-- Semantics of `setMatrix`: when the set parameters represent the class predicates, it holds
+exactly when the original formula holds in the smaller domain. -/
 theorem setMatrix_realize {alpha beta : Ordinal.{u}} (hAB : alpha < beta)
     {m n : Nat} (phi : RankPredicateFormula m n)
     (predicates : Fin m → RankClass alpha) (values : Fin n → RankDomain alpha)
@@ -61,6 +69,7 @@ theorem setMatrix_realize {alpha beta : Ordinal.{u}} (hAB : alpha < beta)
 using six actual syntax books, a truth set, and the domain set. -/
 def rankSetTruthFormula : RankPredicateFormula 0 8 := setMatrix rankTruthMatrix
 
+/-- Semantics of `rankSetTruthFormula`. -/
 theorem rankSetTruthFormula_realize {alpha beta : Ordinal.{u}} (hAB : alpha < beta)
     (hLimit : Order.IsSuccLimit alpha) (hOmega : Ordinal.omega0 < alpha)
     (truth : RankDomain beta) :

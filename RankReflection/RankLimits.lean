@@ -1,14 +1,19 @@
 import RankReflection.RankInclusion
 import FullMarkedBLP.RankOmegaPreservation
 
+/-! Proper elementary rank inclusions have nonzero limit heights above `ω`. These facts are derived
+from elementarity, not assumed. -/
+
 namespace RankReflection
 
 open FullMarkedBLP
 
 universe u
 
+/-- The sentence `∃ x, x = x`. -/
 def nonemptySentence : RankPredicateFormula 0 0 := (RankPredicateFormula.equal 0 0).ex
 
+/-- `V_alpha` satisfies `nonemptySentence` exactly when `0 < alpha`. -/
 theorem nonemptySentence_realize (alpha : Ordinal.{u}) :
     nonemptySentence.Realize Fin.elim0 (Fin.elim0 : Fin 0 → RankDomain alpha) ↔ 0 < alpha := by
   simp only [nonemptySentence, RankPredicateFormula.realize_ex, RankPredicateFormula.Realize]
@@ -17,24 +22,31 @@ theorem nonemptySentence_realize (alpha : Ordinal.{u}) :
     exact lt_of_le_of_lt bot_le x.property
   · exact fun h => ⟨⟨∅, by simpa only [ZFSet.rank_empty] using h⟩, trivial⟩
 
+/-- The formula `∃ y, x ∈ y` in one free variable `x`. -/
 def hasContainerFormula : RankPredicateFormula 0 1 := (RankPredicateFormula.member 0 1).ex
 
+/-- Semantics of `hasContainerFormula`. -/
 theorem hasContainerFormula_realize {alpha : Ordinal.{u}} (values : Fin 1 → RankDomain alpha) :
     hasContainerFormula.Realize Fin.elim0 values ↔
       ∃ y : RankDomain alpha, (values 0).val ∈ y.val := by
   simp [hasContainerFormula, RankPredicateFormula.realize_ex, RankPredicateFormula.Realize, Fin.snoc]
 
+/-- The sentence `∀ x, ∃ y, x ∈ y`. -/
 def membershipClosureSentence : RankPredicateFormula 0 0 := hasContainerFormula.all
 
+/-- Semantics of `membershipClosureSentence`. -/
 theorem membershipClosureSentence_realize (alpha : Ordinal.{u}) :
     membershipClosureSentence.Realize Fin.elim0 (Fin.elim0 : Fin 0 → RankDomain alpha) ↔
       ∀ x : RankDomain alpha, ∃ y : RankDomain alpha, x.val ∈ y.val := by
   simp [membershipClosureSentence, RankPredicateFormula.Realize, hasContainerFormula_realize, Fin.snoc]
 
+/-- In `V_alpha` for limit `alpha`, every set belongs to some set (its singleton). -/
 theorem rankDomain_container {alpha : Ordinal.{u}} (hAlpha : Order.IsSuccLimit alpha) (x : RankDomain alpha) :
     ∃ y : RankDomain alpha, x.val ∈ y.val := by
   exact ⟨⟨{x.val}, by rw [ZFSet.rank_singleton]; exact hAlpha.succ_lt x.property⟩, by simp⟩
 
+/-- Conversely, if `0 < alpha` and every element of `V_alpha` belongs to an element of `V_alpha`,
+then `alpha` is a limit. -/
 theorem isSuccLimit_of_rankDomain_container {alpha : Ordinal.{u}} (hPos : 0 < alpha)
     (hClosed : ∀ x : RankDomain alpha, ∃ y : RankDomain alpha, x.val ∈ y.val) :
     Order.IsSuccLimit alpha := by
@@ -71,6 +83,8 @@ theorem RankElementaryInclusion.isSuccLimit_source {alpha beta : Ordinal.{u}}
     exact False.elim (not_lt_of_ge (Order.le_of_lt_succ z.property) hLower)
   · exact hLimit
 
+/-- A proper elementary rank inclusion also has a limit target, transferred through
+`membershipClosureSentence`. -/
 theorem RankElementaryInclusion.isSuccLimit_target {alpha beta : Ordinal.{u}}
     (hElem : RankElementaryInclusion alpha beta) (hAB : alpha < beta) :
     Order.IsSuccLimit beta := by
@@ -80,10 +94,12 @@ theorem RankElementaryInclusion.isSuccLimit_target {alpha beta : Ordinal.{u}}
   apply (hElem.map_sentence membershipClosureSentence).mpr
   exact (membershipClosureSentence_realize alpha).mpr (rankDomain_container hAlpha)
 
+/-- The sentence "some ordinal is a nonzero limit". -/
 def existsLimitSentence : RankPredicateFormula 0 0 :=
   ((rankPredicateOfFormula rankOrdinalFormula).and
     (rankPredicateOfFormula rankNonzeroLimitFormula)).ex
 
+/-- `V_alpha` satisfies `existsLimitSentence` exactly when `ω < alpha`. -/
 theorem existsLimitSentence_realize (alpha : Ordinal.{u}) :
     existsLimitSentence.Realize Fin.elim0 (Fin.elim0 : Fin 0 → RankDomain alpha) ↔
       Ordinal.omega0 < alpha := by
