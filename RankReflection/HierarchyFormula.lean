@@ -1,33 +1,42 @@
 import RankReflection.ElementaryInclusionFormula
 import FullMarkedBLP.RankHierarchyRecursion
 
+/-! A finite formula for the cumulative hierarchy built from recursion graphs, whose witnesses are
+exactly the actual `V_delta`. -/
+
 namespace RankReflection
 
 open FullMarkedBLP
 
 universe u
 
+/-- The atom "`x` is an ordinal". -/
 def ordinalAtom {m n : Nat} (x : Fin n) : RankPredicateFormula m n :=
   rankPredicateAtom rankOrdinalFormula ![x]
 
+/-- Semantics of `ordinalAtom`. -/
 theorem ordinalAtom_realize {eta : Ordinal.{u}} {m n : Nat} (x : Fin n)
     (classes : Fin m → RankClass eta) (values : Fin n → RankDomain eta) :
     (ordinalAtom x).Realize classes values ↔ ZFSet.IsOrdinal (values x).val := by
   rw [ordinalAtom, rankPredicateAtom_realize, rankMapSingle]
   exact rankOrdinalFormula_realize _
 
+/-- The atom "`x` is a nonzero limit ordinal". -/
 def limitAtom {m n : Nat} (x : Fin n) : RankPredicateFormula m n :=
   rankPredicateAtom rankNonzeroLimitFormula ![x]
 
+/-- Semantics of `limitAtom`. -/
 theorem limitAtom_realize {eta : Ordinal.{u}} {m n : Nat} (x : Fin n)
     (classes : Fin m → RankClass eta) (values : Fin n → RankDomain eta) :
     (limitAtom x).Realize classes values ↔ rankIsNonzeroLimit (values x) := by
   rw [limitAtom, rankPredicateAtom_realize, rankMapSingle]
   exact rankNonzeroLimitFormula_realize _
 
+/-- The atom "`graph` satisfies the cumulative-hierarchy recursion". -/
 def hierarchyRecAtom {m n : Nat} (graph : Fin n) : RankPredicateFormula m n :=
   rankPredicateAtom rankHierarchyRecFormula ![graph]
 
+/-- Semantics of `hierarchyRecAtom`. -/
 theorem hierarchyRecAtom_realize {eta : Ordinal.{u}} {m n : Nat} (graph : Fin n)
     (classes : Fin m → RankClass eta) (values : Fin n → RankDomain eta) :
     (hierarchyRecAtom graph).Realize classes values ↔ RankHierarchyRec (values graph) := by
@@ -37,11 +46,13 @@ theorem hierarchyRecAtom_realize {eta : Ordinal.{u}} {m n : Nat} (graph : Fin n)
 /-- The graph witnesses have an ordinal domain extending the index. Their
 recursive values are uniquely the actual cumulative hierarchy. -/
 def hierarchyFormula : RankPredicateFormula 0 2 :=
+  -- Slots: 0 = index, 1 = value; quantified: 2 = upper, 3 = range, 4 = graph.
   let body : RankPredicateFormula 0 5 :=
     (ordinalAtom 2).and ((RankPredicateFormula.member 0 2).and ((rankFormulaFunction 4 2 3).and
       ((hierarchyRecAtom 4).and (rankFormulaGraphApplies 4 0 1))))
   (ordinalAtom 0).and body.ex.ex.ex
 
+/-- `hierarchyFormula` unfolded into its witnesses, before identifying the value with `V_delta`. -/
 theorem hierarchyFormula_realize_raw {eta : Ordinal.{u}} (values : Fin 2 → RankDomain eta) :
     hierarchyFormula.Realize Fin.elim0 values ↔
       ZFSet.IsOrdinal (values 0).val ∧ ∃ upper range graph : RankDomain eta,

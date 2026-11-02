@@ -1,11 +1,15 @@
 import RankReflection.SetSatisfaction
 
+/-! Agreement of two truth predicates on all formulas, expressed by one finite formula, and its
+equivalence with elementarity of the natural inclusion. -/
+
 namespace RankReflection
 
 open FullMarkedBLP
 
 universe u
 
+/-- Coding an assignment is unchanged by the natural inclusion. -/
 theorem rankAssignment_inclusion_val {alpha beta : Ordinal.{u}} (hAB : alpha ≤ beta)
     (hAlpha : Order.IsSuccLimit alpha) (hBeta : Order.IsSuccLimit beta)
     {n : Nat} (values : Fin n → RankDomain alpha) :
@@ -15,6 +19,7 @@ theorem rankAssignment_inclusion_val {alpha beta : Ordinal.{u}} (hAB : alpha ≤
   intro z
   simp only [rankAssignment_mem_iff, Function.comp_apply, rankInclusion_val]
 
+/-- Truth of a coded formula in the larger domain, read through the natural inclusion. -/
 theorem rankFormulaTruth_inclusion {alpha beta : Ordinal.{u}} (hAB : alpha ≤ beta)
     (hAlpha : Order.IsSuccLimit alpha) (hBeta : Order.IsSuccLimit beta)
     (truth : RankClass beta) {n : Nat} (phi : RankPredicateFormula 0 n)
@@ -47,6 +52,7 @@ def truthAgreementMatrix : RankPredicateFormula 2 6 :=
       ((rankFormulaTruthHolds 0 6 7).iff (rankFormulaTruthHolds 1 6 7))
   body.all.all
 
+/-- Semantics of `truthAgreementMatrix`: it holds exactly when the two truth predicates agree. -/
 theorem truthAgreementMatrix_realize {alpha : Ordinal.{u}}
     (hAlpha : Order.IsSuccLimit alpha) (hOmega : Ordinal.omega0 < alpha)
     (left right : RankClass alpha) :

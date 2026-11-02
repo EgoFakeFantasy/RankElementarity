@@ -1,5 +1,8 @@
 import RankReflection.ReflectionFormula
 
+/-! The meaning of the reflection formula: an elementary extension of `V_alpha` exists below the
+ambient height. -/
+
 namespace RankReflection
 
 open FullMarkedBLP

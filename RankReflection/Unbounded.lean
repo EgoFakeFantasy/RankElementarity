@@ -1,5 +1,8 @@
 import RankReflection.ReflectionSemantics
 
+/-! Main theorems: elementary extensions of `V_alpha` are unbounded below `beta`, first for ordinals
+and then for cardinals. -/
+
 namespace RankReflection
 
 open FullMarkedBLP
